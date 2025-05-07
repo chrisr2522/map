@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>MDT Map</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+<script>
+// Init Map
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',  // Clean light style
+  center: [-71.06, 42.36],
+  zoom: 12
+});
+
+// Sample Data → You will replace these later with dynamic data if needed
+const activeCalls = [
+  { lng: -71.06, lat: 42.36, title: "2025-001 - Cardiac Arrest", icon: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Phone_icon.png" },
+  { lng: -71.065, lat: 42.361, title: "2025-002 - MVC (Minor Injuries)", icon: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Phone_icon.png" }
+];
+
+const units = [
+  { lng: -71.07, lat: 42.363, title: "A10 - Enroute", icon: "https://upload.wikimedia.org/wikipedia/commons/8/89/Ambulance_icon.png" },
+  { lng: -71.075, lat: 42.365, title: "A12 - At Scene", icon: "https://upload.wikimedia.org/wikipedia/commons/8/89/Ambulance_icon.png" }
+];
+
+// Add Marker function
+function addMarker(lng, lat, icon, title) {
+  const el = document.createElement('div');
+  el.style.backgroundImage = `url(${icon})`;
+  el.style.width = '32px';
+  el.style.height = '32px';
+  el.style.backgroundSize = 'cover';
+
+  new maplibregl.Marker(el)
+    .setLngLat([lng, lat])
+    .setPopup(new maplibregl.Popup().setHTML(`<b>${title}</b>`))
+    .addTo(map);
+}
+
+// Add active calls
+activeCalls.forEach(call => addMarker(call.lng, call.lat, call.icon, call.title));
+
+// Add units
+units.forEach(unit => addMarker(unit.lng, unit.lat, unit.icon, unit.title));
+</script>
+
+</body>
+</html>
