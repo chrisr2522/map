@@ -39,22 +39,21 @@ let units = [];
 
 try {
   if (callsParam) activeCalls = JSON.parse(callsParam);
-  if (unitsParam) {
-    units = JSON.parse(unitsParam).map(unit => ({
-      ...unit,
-      lat: parseFloat(unit.lat),
-      lng: parseFloat(unit.lng)
-    }));
-  }
+  if (unitsParam) units = JSON.parse(unitsParam);
 } catch (e) {
   console.error("Error parsing data", e);
 }
 
-// Marker helper
-function addMarker(lng, lat, icon, title) {
+function addMarker(lng, lat, type, title) {
   const el = document.createElement('div');
   el.className = 'marker';
-  el.style.backgroundImage = `url(${icon})`;
+
+  // Icon based on type
+  if (type === "call") {
+    el.style.backgroundImage = "url(https://upload.wikimedia.org/wikipedia/commons/6/6c/Phone_icon.png)";
+  } else if (type === "unit") {
+    el.style.backgroundImage = "url(https://upload.wikimedia.org/wikipedia/commons/8/89/Ambulance_icon.png)";
+  }
 
   new maplibregl.Marker(el)
     .setLngLat([lng, lat])
@@ -62,11 +61,9 @@ function addMarker(lng, lat, icon, title) {
     .addTo(map);
 }
 
-// Add active calls
-activeCalls.forEach(call => addMarker(call.lng, call.lat, "https://upload.wikimedia.org/wikipedia/commons/6/6c/Phone_icon.png", call.title));
-
-// Add units
-units.forEach(unit => addMarker(unit.lng, unit.lat, "https://upload.wikimedia.org/wikipedia/commons/8/89/Ambulance_icon.png", unit.title));
+// Add markers
+activeCalls.forEach(call => addMarker(call.lng, call.lat, call.type, call.title));
+units.forEach(unit => addMarker(unit.lng, unit.lat, unit.type, unit.title));
 </script>
 
 </body>
