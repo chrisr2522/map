@@ -66,7 +66,8 @@ activeCalls.forEach(call => {
 
 // Add Units Markers
 units.forEach(unit => {
-  addMarker(unit.lng, unit.lat, "https://upload.wikimedia.org/wikipedia/commons/8/89/Ambulance_icon.png", unit.title);
+  const title = unit.title || `${unit.unit_id} - ${unit.status}`;
+  addMarker(unit.lng, unit.lat, "https://upload.wikimedia.org/wikipedia/commons/8/89/Ambulance_icon.png", title);
 });
 </script>
 
