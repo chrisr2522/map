@@ -39,7 +39,13 @@ let units = [];
 
 try {
   if (callsParam) activeCalls = JSON.parse(callsParam);
-  if (unitsParam) units = JSON.parse(unitsParam);
+  if (unitsParam) {
+    units = JSON.parse(unitsParam).map(unit => ({
+      ...unit,
+      lat: parseFloat(unit.lat),
+      lng: parseFloat(unit.lng)
+    }));
+  }
 } catch (e) {
   console.error("Error parsing data", e);
 }
