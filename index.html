@@ -29,7 +29,7 @@ const map = new maplibregl.Map({
   zoom: 12
 });
 
-// Parse URL parameters for calls and units
+// Get URL Params
 const urlParams = new URLSearchParams(window.location.search);
 const callsParam = urlParams.get('calls');
 const unitsParam = urlParams.get('units');
@@ -38,13 +38,16 @@ let activeCalls = [];
 let units = [];
 
 try {
-  if (callsParam) activeCalls = JSON.parse(callsParam);
-  if (unitsParam) units = JSON.parse(unitsParam);
+  if (callsParam) activeCalls = JSON.parse(atob(callsParam));
+  if (unitsParam) units = JSON.parse(atob(unitsParam));
 } catch (e) {
-  console.error("Error parsing data", e);
+  console.error("Error parsing params", e);
 }
 
-// Add Marker helper
+console.log("Active Calls", activeCalls);
+console.log("Units", units);
+
+// Add Marker
 function addMarker(lng, lat, icon, title) {
   const el = document.createElement('div');
   el.className = 'marker';
@@ -56,11 +59,15 @@ function addMarker(lng, lat, icon, title) {
     .addTo(map);
 }
 
-// Add active calls
-activeCalls.forEach(call => addMarker(call.lng, call.lat, "https://upload.wikimedia.org/wikipedia/commons/6/6c/Phone_icon.png", call.title));
+// Add Calls Markers
+activeCalls.forEach(call => {
+  addMarker(call.lng, call.lat, "https://upload.wikimedia.org/wikipedia/commons/6/6c/Phone_icon.png", call.title);
+});
 
-// Add units
-units.forEach(unit => addMarker(unit.lng, unit.lat, "https://upload.wikimedia.org/wikipedia/commons/8/89/Ambulance_icon.png", unit.title));
+// Add Units Markers
+units.forEach(unit => {
+  addMarker(unit.lng, unit.lat, "https://upload.wikimedia.org/wikipedia/commons/8/89/Ambulance_icon.png", unit.title);
+});
 </script>
 
 </body>
