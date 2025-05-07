@@ -9,9 +9,11 @@
 body { margin: 0; padding: 0; }
 #map { position: absolute; top: 0; bottom: 0; width: 100%; }
 .marker {
-  background-size: cover;
-  width: 32px;
-  height: 32px;
+  background-size: contain;  /* ✅ FIXED -> contain instead of cover */
+  background-repeat: no-repeat;  /* ✅ FIXED -> no repeat */
+  background-position: center;  /* ✅ FIXED -> centered */
+  width: 28px;  /* ✅ Slightly smaller so it's clean */
+  height: 28px;
   border-radius: 50%;
 }
 </style>
@@ -21,15 +23,15 @@ body { margin: 0; padding: 0; }
 
 <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
 <script>
-// Init Map
+// Initialize Map
 const map = new maplibregl.Map({
   container: 'map',
-  style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+  style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',  // Clean light style
   center: [-71.06, 42.36],
   zoom: 12
 });
 
-// Sample Data
+// Sample Data → You can make this dynamic later
 const activeCalls = [
   { lng: -71.06, lat: 42.36, title: "2025-001 - Cardiac Arrest", icon: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Phone_icon.png" },
   { lng: -71.065, lat: 42.361, title: "2025-002 - MVC (Minor Injuries)", icon: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Phone_icon.png" }
@@ -40,7 +42,7 @@ const units = [
   { lng: -71.075, lat: 42.365, title: "A12 - At Scene", icon: "https://upload.wikimedia.org/wikipedia/commons/8/89/Ambulance_icon.png" }
 ];
 
-// Add Marker
+// Add Marker Helper
 function addMarker(lng, lat, icon, title) {
   const el = document.createElement('div');
   el.className = 'marker';
@@ -52,6 +54,7 @@ function addMarker(lng, lat, icon, title) {
     .addTo(map);
 }
 
+// Add markers
 activeCalls.forEach(call => addMarker(call.lng, call.lat, call.icon, call.title));
 units.forEach(unit => addMarker(unit.lng, unit.lat, unit.icon, unit.title));
 </script>
